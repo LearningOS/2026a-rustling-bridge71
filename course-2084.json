@@ -2,8 +2,8 @@
   "schema": 1,
   "courseId": 2084,
   "repository": "LearningOS/2026a-rustling-bridge71",
-  "commit": "f5747479ced592aab0029686f682365e2756cb59",
-  "score": 109,
+  "commit": "3b7a71dbdf3f27f12bfbdddcfb8aa5f844d2dd8f",
+  "score": 110,
   "totalScore": 110,
   "exercises": [
     {
@@ -625,9 +625,9 @@
     {
       "name": "clippy2",
       "max": 1,
-      "score": 0,
-      "status": "fail",
-      "exitCode": 1
+      "score": 1,
+      "status": "pass",
+      "exitCode": 0
     },
     {
       "name": "clippy3",
@@ -778,9 +778,9 @@
     }
   ],
   "student": "bridge71",
-  "runId": "40095717730",
+  "runId": "40096059456",
   "runAttempt": "1",
   "upload": {
-    "status": "accepted"
+    "status": "pending"
   }
 }
