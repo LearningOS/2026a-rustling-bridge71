@@ -2,7 +2,6 @@
 	graph
 	This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -29,8 +28,37 @@ impl Graph for UndirectedGraph {
         &self.adjacency_table
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
-    }
+        // if let Some(v)  = self.adjacency_table.get_mut(edge.0){
+        //     v.push((edge.1.to_string(),edge.2));
+        //     self.adjacency_table.insert(edge.0.to_string(), v.clone());
+        // }else{
+        //     let mut v : Vec<(String, i32)> = Vec::new();
+        //     v.push((edge.1.to_string(),edge.2));
+        //     self.adjacency_table.insert(edge.0.to_string(), v);
+        // }
+        //
+        // if let Some(v)  = self.adjacency_table.get_mut(edge.1){
+        //     v.push((edge.0.to_string(),edge.2));
+        //     self.adjacency_table.insert(edge.1.to_string(), v.clone());
+        // }else{
+        //     let mut v : Vec<(String, i32)> = Vec::new();
+        //     v.push((edge.0.to_string(),edge.2));
+        //     self.adjacency_table.insert(edge.1.to_string(), v);
+        // }
+        // mark
+
+        let (from, to, weight) = edge;
+        // from -> to
+        self.adjacency_table_mutable()
+            .entry(from.to_string())
+            .or_insert_with(Vec::new)
+            .push((to.to_string(), weight));
+        // to -> from  (无向图，双向添加)
+        self.adjacency_table_mutable()
+            .entry(to.to_string())
+            .or_insert_with(Vec::new)
+            .push((from.to_string(), weight));
+        }
 }
 pub trait Graph {
     fn new() -> Self;

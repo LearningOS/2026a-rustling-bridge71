@@ -2,7 +2,6 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -35,6 +34,7 @@ impl<T> Default for LinkedList<T> {
     }
 }
 
+//mark
 impl<T> LinkedList<T> {
     pub fn new() -> Self {
         Self {
@@ -69,15 +69,111 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
-	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+}
+impl<T: std::cmp::PartialOrd> LinkedList<T> {
+    pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> Self {
+        let mut new = Self::new();
+
+        while let (Some(a), Some(b)) = (list_a.start, list_b.start) {
+            unsafe {
+                let take_a = (*a.as_ptr()).val <= (*b.as_ptr()).val;
+
+                let node = if take_a {
+                    list_a.start = (*a.as_ptr()).next;
+                    list_a.length -= 1;
+                    a
+                } else {
+                    list_b.start = (*b.as_ptr()).next;
+                    list_b.length -= 1;
+                    b
+                };
+
+                // 断开原有连接
+                (*node.as_ptr()).next = None;
+
+                // 将节点直接接到新链表尾部
+                match new.end {
+                    None => new.start = Some(node),
+                    Some(end) => (*end.as_ptr()).next = Some(node),
+                }
+
+                new.end = Some(node);
+                new.length += 1;
+            }
         }
-	}
+
+        // 将剩余节点直接接到末尾
+        let rest = if list_a.length > 0 {
+            list_a
+        } else {
+            list_b
+        };
+
+        if rest.length > 0 {
+            unsafe {
+                match new.end {
+                    None => new.start = rest.start,
+                    Some(end) => (*end.as_ptr()).next = rest.start,
+                }
+            }
+
+            new.end = rest.end;
+            new.length += rest.length;
+        }
+
+        new
+    }
+	// pub fn merge(mut list_a:LinkedList<T>,mut list_b:LinkedList<T>) -> Self
+	// {
+	// 	//TODO
+	// 	// Self {
+	// 	//           length: 0,
+	// 	//           start: None,
+	// 	//           end: None,
+	// 	//       }
+	//        let mut new = Self{
+	// 	          length: 0,
+	// 	          start: None,
+	// 	          end: None,
+	//        };
+	//        while list_a.length > 0 && list_b.length > 0 {
+	//            let a_node = list_a.start.unwrap();
+	//            let b_node = list_b.start.unwrap();
+	//            unsafe{
+	//                let a_val = (*a_node.as_ptr()).val;
+	//                let b_val = (*b_node.as_ptr()).val;
+	//                if a_val <= b_val {
+	//                    list_a.length -= 1;
+	//                    list_a.start = (*a_node.as_ptr()).next;
+	//                    new.add(a_val);
+	//                }else{
+	//                    list_b.length -= 1;
+	//                    list_b.start = (*b_node.as_ptr()).next;
+	//                    new.add(b_val)
+	//                }
+	//            }
+	//        }
+	//        while list_a.length > 0 {
+	//            let a_node = list_a.start.unwrap();
+	//            unsafe {
+	//                let a_val = (*a_node.as_ptr()).val;
+	//                list_a.length -= 1;
+	//                list_a.start = (*a_node.as_ptr()).next;
+	//                new.add(a_val)
+	//            }
+	//        }
+	//
+	//        while list_b.length > 0 {
+	//            let b_node = list_b.start.unwrap();
+	//            unsafe {
+	//                let b_val = (*b_node.as_ptr()).val;
+	//                list_b.length -= 1;
+	//                list_b.start = (*b_node.as_ptr()).next;
+	//                new.add(b_val)
+	//            }
+	//        }
+	//        new
+	// }
 }
 
 impl<T> Display for LinkedList<T>
